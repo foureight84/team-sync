@@ -1,0 +1,36 @@
+# Central NATS hub for team-sync — run this on a remote server the whole team
+# can reach. Developers' local leaf nodes connect to port 7422.
+#
+#   1. echo "SYNC_HUB_PASSWORD=$(openssl rand -hex 24)" > .env
+#   2. docker compose up -d
+#   3. point each developer's team-sync.json at  nats://<this-host>:7422
+#
+# Uses the repo's nats/hub.conf (JetStream enabled, account "SYNC", leafnodes on
+# 7422). The config reads the password from $SYNC_HUB_PASSWORD at startup.
+
+services:
+  nats-hub:
+    image: nats:2.10-alpine
+    container_name: team-sync-hub
+    restart: unless-stopped
+    working_dir: /workspace
+    command: ["-c", "/workspace/nats/hub.conf"]
+    environment:
+      # Pulled from .env (compose auto-loads it). Fails fast if unset.
+      SYNC_HUB_PASSWORD: ${SYNC_HUB_PASSWORD:?set SYNC_HUB_PASSWORD in .env}
+    ports:
+      - "7422:7422"   # leaf nodes  ← REQUIRED: this is what dev machines dial
+      - "8222:8222"   # monitoring  (http://host:8222/healthz, /jsz) — restrict in prod
+      # - "4222:4222" # direct clients — only if a CI box / leafless daemon connects
+    volumes:
+      - ./nats:/workspace/nats:ro          # the committed hub.conf (read-only)
+      - jetstream-data:/workspace/.nats    # durable JetStream store (replay survives restarts)
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O-", "http://127.0.0.1:8222/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  jetstream-data:

@@ -34,13 +34,27 @@ never broadcast.
 
 ## Prerequisites
 
+> **A central NATS hub (with JetStream) is mandatory.** It is the broker every
+> developer's leaf node connects to — it's what carries events between teammates
+> and replays them to anyone who was offline. Without a reachable hub there is no
+> cross-developer sync, and `team-sync.json` / `enroll` both require its URL. One
+> person on the team stands it up **once** — see
+> [Stand up the hub](#stand-up-the-hub-once-per-team) — and everyone points at it.
+
+**Required**
+
 | Need | Why | Install |
 | --- | --- | --- |
+| **A central NATS hub** | the team's shared broker + JetStream store (one per team, reachable by everyone) | see [Stand up the hub](#stand-up-the-hub-once-per-team) |
 | **Node.js ≥ 20** | runs the daemon + tooling (regardless of your app's language) | nodejs.org |
-| **`nats-server`** | the local leaf node | `brew install nats-server` |
-| **A central NATS hub** | the team's shared broker (one per team) | see [Stand up the hub](#stand-up-the-hub-once-per-team) |
-| **`graphify`** *(optional)* | refresh the local code graph after peer edits | the `graphify` CLI/skill |
-| **`pm2`** *(optional)* | only for always-on mode | auto-installed by `setup:machine` |
+| **`nats-server`** | each developer's local leaf node | `brew install nats-server` |
+
+**Optional**
+
+| Need | Why | Install |
+| --- | --- | --- |
+| **`graphify`** | refresh the local code graph after peer edits | the `graphify` CLI/skill |
+| **`pm2`** | only for always-on mode | auto-installed by `setup:machine` |
 
 ---
 
