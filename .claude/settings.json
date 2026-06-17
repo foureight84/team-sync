@@ -1,0 +1,39 @@
+{
+  "$comment": "team-sync: bind the leaf node + project daemon to this Claude Code session. Starts on session open, stops on close. session_id + cwd are read from the hook's stdin JSON. First run prompts to trust this project's hooks. A private project (no team-sync.json) is a silent no-op.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/tooling/session/session.js\" up --harness claude --root \"$CLAUDE_PROJECT_DIR\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/tooling/session/session.js\" up --harness claude --root \"$CLAUDE_PROJECT_DIR\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": "other",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/tooling/session/session.js\" down --harness claude --root \"$CLAUDE_PROJECT_DIR\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

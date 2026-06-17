@@ -1,0 +1,20 @@
+node_modules/
+
+# macOS
+.DS_Store
+
+# NATS JetStream local persistence
+.nats/
+
+# Materialised peer events and scratch payloads (regenerated at runtime)
+.context/live-logs/*
+!.context/live-logs/.gitkeep
+.context/temp-event.md
+
+# Local env
+.env
+.env.local
+
+# Machine-level team-sync state lives in ~/.team-sync (outside the repo).
+# If TEAM_SYNC_HOME is ever pointed inside a repo, keep it out of git:
+.team-sync/

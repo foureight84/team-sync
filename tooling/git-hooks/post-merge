@@ -1,0 +1,5 @@
+#!/bin/sh
+# Fires after a successful `git merge` — and therefore after `git pull`, which
+# is fetch + merge. Incoming peer commits change files you did not author.
+. "$(dirname "$0")/lib.sh"
+graphify_refresh "post-merge"

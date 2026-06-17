@@ -1,0 +1,36 @@
+{
+  "name": "team-sync",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Real-time, zero-drift engineering workspace: OKF + Graphify + NATS leaf-node sync for multi-agent coding teams.",
+  "bin": {
+    "sync-daemon": "tooling/sync-daemon.js",
+    "team-sync-session": "tooling/session/session.js"
+  },
+  "scripts": {
+    "daemon": "node tooling/sync-daemon.js",
+    "publish": "node tooling/sync-daemon.js --publish",
+    "catchup": "node tooling/sync-daemon.js --once",
+    "hub": "nats-server -c nats/hub.conf",
+    "leaf": "nats-server -c nats/leaf.conf",
+    "hooks:install": "sh tooling/git-hooks/install.sh",
+    "hooks:uninstall": "sh tooling/git-hooks/install.sh --uninstall",
+    "setup:machine": "sh tooling/setup/install-machine.sh",
+    "enroll": "node tooling/setup/manage.js enroll",
+    "leave": "node tooling/setup/manage.js leave",
+    "ts:list": "node tooling/setup/manage.js list",
+    "session:up": "node tooling/session/session.js up",
+    "session:down": "node tooling/session/session.js down",
+    "session:status": "node tooling/session/session.js status",
+    "session:gc": "node tooling/session/session.js gc"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@nats-io/jetstream": "^3.0.0",
+    "@nats-io/transport-node": "^3.0.0",
+    "gray-matter": "^4.0.3"
+  }
+}

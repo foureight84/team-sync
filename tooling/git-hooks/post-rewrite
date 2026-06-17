@@ -1,0 +1,5 @@
+#!/bin/sh
+# Fires after history is rewritten (`git rebase`, `git commit --amend`).
+# $1 is the command that triggered it (rebase | amend).
+. "$(dirname "$0")/lib.sh"
+graphify_refresh "post-rewrite($1)"

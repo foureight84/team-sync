@@ -1,0 +1,6 @@
+{
+  "//": "Copy to team-sync.json and COMMIT it for team projects. Its presence is what opts a project into broadcasting. Private projects simply omit this file.",
+  "project": "acme-api",
+  "broadcast": true,
+  "hub": "nats://hub.acme.internal:7422"
+}

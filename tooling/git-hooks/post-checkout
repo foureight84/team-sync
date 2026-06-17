@@ -1,0 +1,8 @@
+#!/bin/sh
+# Fires after `git checkout` / `git switch`.
+# Args: $1 = previous HEAD, $2 = new HEAD, $3 = branch flag (1 = branch switch,
+# 0 = file checkout). Only re-extract on a real branch switch — file checkouts
+# are too frequent and usually irrelevant to the whole-tree graph.
+[ "$3" = "1" ] || exit 0
+. "$(dirname "$0")/lib.sh"
+graphify_refresh "post-checkout"

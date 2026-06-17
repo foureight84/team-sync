@@ -1,0 +1,5 @@
+#!/bin/sh
+# Fires after every `git commit`. Your committed edits must be reflected in the
+# graph before your next Graphify query.
+. "$(dirname "$0")/lib.sh"
+graphify_refresh "post-commit"
